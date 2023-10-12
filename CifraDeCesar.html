@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cifra de César</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        #idButton {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        #idSaida {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <label for="idInput">Insira um texto</label>
+        <input type="text" id="idInput">
+
+        <label for="idCod">Codificar</label>
+        <input type="radio" name="nmEscolha" id="idCod">
+        
+        <label for="idDecod">Decodificar</label>
+        <input type="radio" name="nmEscolha" id="idDecod">
+
+        <label for="idCifra">Informe a cifra</label>
+        <input type="text" id="idCifra">
+
+        <input type="button" id="idButton" value="Enter">
+        <br>
+        <output id="idSaida"></output>
+    </div>
+
+    <script>
+        var inputField = document.getElementById('idInput');
+        var cifraElement = document.getElementById("idCifra");
+
+        var cod = document.getElementById("idCod").checked;
+        var decod = document.getElementById("idDecod").checked;
+
+        cifraElement.addEventListener('input', function () {
+            var cifraValue = cifraElement.value;
+            const regex = /^[a-zA-Z0-9]{1}$/;
+
+            if (!regex.test(cifraValue)) {
+                cifraElement.value = cifraValue.replace(/[^a-zA-Z0-9]/g, '').substring(0, 1);
+            }
+        });
+
+        const vetAlfaMai = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+        const vetAlfaMin = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+        const vetNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26];
+
+        var botao = document.getElementById("idButton");
+
+        botao.onclick = function () {
+            var inputSaida = inputField.value.split(''); //transformar a string em vetor
+            var cifraValue = cifraElement.value;
+
+            for (let i = 0; i < vetNum.length; i++) {
+                if (cifraValue == vetAlfaMai[i] || cifraValue == vetAlfaMin[i]) {
+                    cifraValue = vetNum[i];
+                }
+            } 
+
+            if (cod) {
+                for (let j = 0; j < inputSaida.length; j++) {
+                    inputSaida[j] = vetAlfaMin[j + cifraValue]; // inputSaida[j] = vetAlfaMin[(vetAlfaMin.indexOf(inputSaida[j]) + cifraValue) % 26]
+                }
+            } else {
+                for (let j = 0; j < inputSaida.length; j++) {
+                    inputSaida[j] = vetAlfaMin[(vetAlfaMin.indexOf(inputSaida[j]) - cifraValue + 26) % 26];
+                }
+            }
+
+            document.getElementById("idSaida").innerHTML = inputSaida.join("") //transformar o vetor em uma string
+        };
+    </script>
+</body>
+
+</html>
