@@ -81,9 +81,6 @@
         var inputField = document.getElementById('idInput');
         var cifraElement = document.getElementById("idCifra");
 
-        var cod = document.getElementById("idCod").checked;
-        var decod = document.getElementById("idDecod").checked;
-
         cifraElement.addEventListener('input', function () {
             var cifraValue = cifraElement.value;
             const regex = /^[a-zA-Z0-9]{1}$/;
@@ -100,27 +97,42 @@
         var botao = document.getElementById("idButton");
 
         botao.onclick = function () {
-            var inputSaida = inputField.value.split(''); //transformar a string em vetor
-            var cifraValue = cifraElement.value;
+    var cod = document.getElementById("idCod").checked;
+    var decod = document.getElementById("idDecod").checked;
 
-            for (let i = 0; i < vetNum.length; i++) {
-                if (cifraValue == vetAlfaMai[i] || cifraValue == vetAlfaMin[i]) {
-                    cifraValue = vetNum[i];
-                }
-            } 
+    var inputSaida = inputField.value.split('');
+    var cifraValue = cifraElement.value;
 
-            if (cod) {
-                for (let j = 0; j < inputSaida.length; j++) {
-                    inputSaida[j] = vetAlfaMin[j + cifraValue]; // inputSaida[j] = vetAlfaMin[(vetAlfaMin.indexOf(inputSaida[j]) + cifraValue) % 26]
-                }
-            } else {
-                for (let j = 0; j < inputSaida.length; j++) {
-                    inputSaida[j] = vetAlfaMin[(vetAlfaMin.indexOf(inputSaida[j]) - cifraValue + 26) % 26];
-                }
+    for (let i = 0; i < vetNum.length; i++) {
+        if (cifraValue == vetAlfaMai[i] || cifraValue == vetAlfaMin[i]) {
+            cifraValue = vetNum[i];
+        }
+    }
+
+    // Converter a cifraValue em um número
+    cifraValue = parseInt(cifraValue);
+
+    if (cod) {
+        for (let j = 0; j < inputSaida.length; j++) {
+            // Adicione cifraValue ao índice atual no vetor vetAlfaMin
+            let currentIndex = vetAlfaMin.indexOf(inputSaida[j]);
+            if (currentIndex !== -1) {
+                let newIndex = (currentIndex + cifraValue) % 26;
+                inputSaida[j] = vetAlfaMin[newIndex];
             }
+        }
+    } else {
+        for (let j = 0; j < inputSaida.length; j++) {
+            let currentIndex = vetAlfaMin.indexOf(inputSaida[j]);
+            if (currentIndex !== -1) {
+                let newIndex = (currentIndex - cifraValue + 26) % 26;
+                inputSaida[j] = vetAlfaMin[newIndex];
+            }
+        }
+    }
 
-            document.getElementById("idSaida").innerHTML = inputSaida.join("") //transformar o vetor em uma string
-        };
+    document.getElementById("idSaida").innerHTML = inputSaida.join("");
+};
     </script>
 </body>
 
